@@ -12,6 +12,7 @@ import subprocess
 from subprocess import PIPE,Popen
 import warnings
 import sys
+import argparse
 import fnmatch
 import cPickle
 from BeautifulSoup import BeautifulStoneSoup
@@ -26,26 +27,27 @@ ENstemmer = SnowballStemmer("english")
 
 warnings.filterwarnings("ignore")
 
-# sys.stdout = codecs.open('enayat_out','w',encoding='utf-8-sig')
-
-# sys.stdout = codecs.open('mergeExample_output','w',encoding='utf-8-sig')   # Write outout to a file named 'output'
+# sys.stdout = codecs.open('output','w',encoding='utf-8-sig')   # Write outout to a file named 'output'
 
 tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s',\
     level=logging.INFO)
 
+parser = argparse.ArgumentParser(description='Train a Word2Vec model based on comparable corpora')
+parser.add_argument('-c','--context_size', help='Integer for context window size',default=48)
+args = vars(parser.parse_args())
+
+
 # GLOBAL VARIABLES
 epsilon = 1.0
-context_size = 48
+context_size = args['context_size']
 min_word_count = 10
 no_of_training_documents = "all"
 dir_name="gererated_models"
 # model_name = 'English-Hindi-vector-model-'+str(no_of_training_documents)+'-cs-'+str(context_size)+'-wc-'+str(min_word_count)   #PREVIOUS
 model_name = 'English-Hindi-vector-model_with_words-'+str(no_of_training_documents)+'-cs-'+str(context_size)+'-wc-'+str(min_word_count)   #NEW
-# model_name="test_model"
 if no_of_training_documents == 'all':
     no_of_training_documents = -1
-
 
 IF_STEMMING = False
 
@@ -550,11 +552,11 @@ def trainEnglishGermanWordVec(K, model_name, lang1_set_file_name, lang2_set_file
 
 def main():
 
-    lang1_words_file_name = "en_words"
-    lang2_words_file_name = "hi_words"
+    lang1_words_file_name = "english_words"
+    lang2_words_file_name = "hindi_words"
 
-    lang1_corpus_dir = "hindi/comparable_english_articles"
-    lang2_corpus_dir = "hindi/comparable_hindi_articles"
+    lang1_corpus_dir = "comparable_english-hindi_wiki_data/comparable_english_articles"
+    lang2_corpus_dir = "comparable_english-hindi_wiki_data/comparable_hindi_articles"
     model = trainEnglishGermanWordVec(no_of_training_documents, model_name, lang1_words_file_name, lang2_words_file_name, lang1_corpus_dir, lang2_corpus_dir)
     # model = word2vec.Word2Vec.load('models'/+model_name)
     # # print '\n\n\n'

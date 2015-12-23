@@ -17,10 +17,10 @@ dir_name="gererated_models"
 model_name='English-Hindi-vector-model_with_words-'+str(no_of_training_documents)+'-cs-'+str(context_size)+'-wc-'+str(min_word_count)
 model = word2vec.Word2Vec.load(dir_name+'/'+model_name)
 
-lang1_words_file_name="en_words"
-lang2_words_file_name="hi_words"
-words_in_language_1_file = open(lang1_words_file_name, 'rb')
-words_in_language_2_file = open(lang2_words_file_name, 'rb')
+lang1_words_file_name="english_words"
+lang2_words_file_name="hindi_words"
+words_in_language_1_file = open(dir_name+'/'+lang1_words_file_name, 'rb')
+words_in_language_2_file = open(dir_name+'/'+lang2_words_file_name, 'rb')
 words_lang2=list(cPickle.load(words_in_language_2_file))
 words_lang1=list(cPickle.load(words_in_language_1_file))
 

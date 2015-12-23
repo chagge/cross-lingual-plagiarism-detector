@@ -38,8 +38,8 @@ def fileToSentencesHindi(file):
     sentences=documentToSentencesHindi(document)
     return sentences
 
-lang1_corpus_dir="corpus_generation_data/comparable_english_articles"
-lang2_corpus_dir="corpus_generation_data/comparable_hindi_articles"
+lang1_corpus_dir="comparable_english-hindi_wiki_data/comparable_english_articles"
+lang2_corpus_dir="comparable_english-hindi_wiki_data/comparable_hindi_articles"
 corpusDirName=lang1_corpus_dir
 combined_sentences=[]
 iter_i=0
