@@ -6,4 +6,4 @@ python $PYTHONPATH/nn/rae_compute.py\
   instantTestFile\
   gererated_models_and_data/all_words_with_vectors\
   RAE-model.model.gz\
-  instantVecFile.txt
+  instant/instantVecFile.txt
