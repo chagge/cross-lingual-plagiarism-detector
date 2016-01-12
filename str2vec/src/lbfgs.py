@@ -18,7 +18,6 @@ iprint=1
 def optimize(func, x0, maxiter, verbose=1, check_grad=False, args=(),
              callback=None):
   options = {'maxiter':maxiter}
-  print "EN_INSIDE OPTIMIZATION"
   if verbose:
     # print info. to stdout every iprint iterations
     options['iprint'] = 1

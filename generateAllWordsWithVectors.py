@@ -13,7 +13,7 @@ min_word_count=10
 no_of_training_documents='all'
 # no_of_training_documents=200
 
-dir_name="gererated_models"
+dir_name="generated_models"
 model_name='English-Hindi-vector-model_with_words-'+str(no_of_training_documents)+'-cs-'+str(context_size)+'-wc-'+str(min_word_count)
 model = word2vec.Word2Vec.load(dir_name+'/'+model_name)
 

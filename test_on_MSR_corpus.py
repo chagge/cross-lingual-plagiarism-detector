@@ -13,6 +13,7 @@ from sklearn.metrics import confusion_matrix
 #besr params
 c= 10
 gamma= 0.1
+dir_name="generated_models"
 
 def simpleLibLinear(X_train,Y_train):
 	prob = ll.problem(Y_train,X_train)
@@ -32,7 +33,6 @@ def simpleLibSVM(X_train,Y_train,model_name):
 	# param = svm_parameter('-t 1 -d 2 -c '+str(c)+' -q -r '+str(coef0))  # QUADRATIC
 	# param = svm_parameter('-t 0 -c 8 -q')
 	m = svm_train(prob, param)
-	dir_name="gererated_models"
 	svm_save_model(dir_name+'/'+model_name, m)
 	return m
 
@@ -78,17 +78,17 @@ def f6(sent1,sent2):
 	return float(len(common))/len(words2)
 
 def main():
-	lang_pair =  sys.argv[1]
+	lang_pair = sys.argv[0]
 
-	X_train_file_name="X_train_2"
-	Y_train_file_name="Y_train_2"
-	X_test_file_name="X_test_2"
-	Y_test_file_name="Y_test_2"
+	X_train_file_name="X_train"
+	Y_train_file_name="Y_train"
+	X_test_file_name="X_test"
+	Y_test_file_name="Y_test"
 
-	X_train_file=open(X_train_file_name,"r")
-	Y_train_file=open(Y_train_file_name,"r")
-	X_test_file=open(X_test_file_name,"r")
-	Y_test_file=open(Y_test_file_name,"r")
+	X_train_file=open(dir_name+'/'+X_train_file_name,"r")
+	Y_train_file=open(dir_name+'/'+Y_train_file_name,"r")
+	X_test_file=open(dir_name+'/'+X_test_file_name,"r")
+	Y_test_file=open(dir_name+'/'+Y_test_file_name,"r")
 
 	x_train=cPickle.load(X_train_file)
 	Y_train=cPickle.load(Y_train_file)

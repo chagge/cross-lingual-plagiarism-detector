@@ -1,6 +1,9 @@
 from subprocess import call
 import codecs,os
 from svmutil import *
+import numpy as np
+from sklearn.metrics.pairwise import cosine_similarity
+import cPickle
 
 def minPool(A):
 	return np.matrix(A).min()
@@ -45,7 +48,7 @@ def dynamicPooling(A,m,n,Np):
 		ini_row=ini_row+subset_row[i]
 	return final_matrix
 	
-def generatePooledMatrix(sentence1,sentence2):
+def generatePooledMatrix(sentence1,sentence2,Np):
 	sent1_preprocess_list=sentence1.split(';')
 	# print len(sentence1_vectors)
 	sent2_preprocess_list=sentence2.split(';')
@@ -85,28 +88,36 @@ def generatePooledMatrix(sentence1,sentence2):
 	pooledMatrix=dynamicPooling(similarity_matrix,m,n,Np)
 	# print "POOLED SM SHAPE:",pooledMatrix.shape
 
-	X=append(pooledMatrix)
+	# X.append(pooledMatrix)
+	# return X
+	return pooledMatrix
 
 def main():
-	sent1=raw_input()
-	sent2=raw_input()
-	pwd=os.getcwd()
+	# sent1=raw_input("ENTER SENTENCE 1: ")
+	# sent2=raw_input("ENTER SENTENCE 2: ")
 
-	f=codecs.open("instantTestFile","w",encoding="utf-8-sig")
+	sent1="hello how are you?"
+	sent2="hey how do you do?"
+
+	Np=15
+	# pwd=os.getcwd()
+
+	f=codecs.open("instant/instantTestFile","w",encoding="utf-8-sig")
 	f.write(sent1+'\n'+sent2+'\n')
 	f.close()
 
-	a=["./paraphrase_compute_vector.sh"]
+	a=["./instant_compute_vector.sh"]
 	call(a)
 
-	vec_file=open("instantVecFile,txt")
+	vec_file=open("instant/instantVecFile.txt").readlines()
+	print "len:",len(vec_file)
 	sentence1=vec_file[0]
 	sentence2=vec_file[1]
 	
-	X=generatePooledMatrix(sentence1,sentence2)
+	X=generatePooledMatrix(sentence1,sentence2,Np)
 
 	model_name="libsvm_model"
 	m=svm_load_model(model_name)
-	print svm_predict(X)
+	print svm_predict(X,1)
 
 main()

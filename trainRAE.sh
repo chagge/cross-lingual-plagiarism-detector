@@ -9,8 +9,8 @@ N=8
 DIR=`pwd -P`
 export PYTHONPATH=$DIR/str2vec/src
 mpirun -n $1 python $PYTHONPATH/nn/lbfgstrainer.py\
-  -instances gererated_models_and_data/all_sentences_with_frequencies\
+  -instances generated_models/all_sentences_with_frequencies\
   -model RAE-model.model.gz\
-  -word_vector gererated_models_and_data/all_words_with_vectors\
+  -word_vector generated_models/all_words_with_vectors\
   -lambda_reg 0.15\
   -m 200

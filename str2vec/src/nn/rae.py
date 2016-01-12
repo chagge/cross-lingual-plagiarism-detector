@@ -86,7 +86,6 @@ class RecursiveAutoencoder(object):
       theta: parameter vector
       embsize: dimension of word embedding vector
     '''
-    print "EN_BUILDING"
     assert(theta.size == cls.compute_parameter_num(embsize))
     offset = 0
     sz = embsize * embsize
@@ -110,7 +109,6 @@ class RecursiveAutoencoder(object):
     
     bo2 = theta[offset:offset+embsize].reshape(embsize, 1)
     offset += embsize
-    print "EN_BUILD COMPLETE "
     return RecursiveAutoencoder(Wi1, Wi2, bi, Wo1, Wo2, bo1, bo2)
   
   @classmethod
@@ -160,7 +158,6 @@ class RecursiveAutoencoder(object):
       value1: root of the tree, an instance of InternalNode 
       value2: reconstruction_error
     '''
-    print "EN_FORWARD"
     words_num = words_embedded.shape[1]
     
     tree_nodes = [None]*(2*words_num - 1)
@@ -193,7 +190,6 @@ class RecursiveAutoencoder(object):
     # initialize candidate internal nodes
     candidate_nodes = []
     for i in range(words_num-1):
-      print "EN_FORWARD_LOOP",i,"till",words_num
       left_child = tree_nodes[i]
       right_child = tree_nodes[i+1]
       node = InternalNode(-i-1, left_child, right_child,
@@ -207,7 +203,6 @@ class RecursiveAutoencoder(object):
     
     for j in range(words_num-1):
       # find the smallest reconstruction error
-      print "EN_FORWARD_LOOP2",j,"till",words_num
       J_minpos = J.argmin()
       J_min = J[J_minpos]
       reconstruction_error += J_min
@@ -429,7 +424,6 @@ if __name__ == '__main__':
   
   with Reader(phrases_file) as reader, Writer(output_file) as writer:
     for phrase in reader:
-      print "EN_READING PHRASE"
       instance = Instance.parse_from_str(phrase, word_vectors)
       words_embedded = word_vectors[instance.words]
       root_node, cost = rae.forward(words_embedded)

@@ -43,7 +43,7 @@ epsilon = 1.0
 context_size = args['context_size']
 min_word_count = 10
 no_of_training_documents = "all"
-dir_name="gererated_models"
+dir_name="generated_models"
 # model_name = 'English-Hindi-vector-model-'+str(no_of_training_documents)+'-cs-'+str(context_size)+'-wc-'+str(min_word_count)   #PREVIOUS
 model_name = 'English-Hindi-vector-model_with_words-'+str(no_of_training_documents)+'-cs-'+str(context_size)+'-wc-'+str(min_word_count)   #NEW
 if no_of_training_documents == 'all':

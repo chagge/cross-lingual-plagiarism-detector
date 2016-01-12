@@ -83,7 +83,7 @@ for root, dirnames, lang1FileNames in os.walk(corpusDirName):
         # print len(combined_sentences)
 # print combined_sentences
 freqs = Counter(combined_sentences)
-dir_name="gererated_models"
+dir_name="generated_models"
 f=codecs.open(dir_name+"/all_sentences_with_frequencies","w",encoding='utf-8-sig')
 # itr=0
 for word_freq in freqs.items():

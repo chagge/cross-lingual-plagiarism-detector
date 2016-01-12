@@ -1,8 +1,8 @@
-
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
-import cPickle
+import cPickle,sys
 
+dir_name="generated_models"
 
 def minPool(A):
 	return np.matrix(A).min()
@@ -50,8 +50,8 @@ def dynamicPooling(A,m,n,Np):
 def dumpFinalVectors(sents_file_name,labels_file_name,X_file_name,Y_file_name,Np=7):
 	# MSR_train_sents=open(path_sents_vecs+train_sents_file_name,"r").readlines()
 	# MSR_train_labels=open(path_labels+train_labels_file_name,"r").readlines()
-	MSR_sents=open(path_sents_vecs+sents_file_name,"r").readlines()
-	MSR_labels=open(path_labels+labels_file_name,"r").readlines()
+	MSR_sents=open(path_sents_vecs+'/'+sents_file_name,"r").readlines()
+	MSR_labels=open(path_sents_vecs+'/'+labels_file_name,"r").readlines()
 	print "FILES OPENED"
 
 	X=[]
@@ -110,7 +110,6 @@ def dumpFinalVectors(sents_file_name,labels_file_name,X_file_name,Y_file_name,Np
 	print X.shape
 	# print X
 	# print Y
-	dir_name="gererated_models"
 	X_file=open(dir_name+'/'+X_file_name,"w")
 	Y_file=open(dir_name+'/'+Y_file_name,"w")
 	cPickle.dump(X,X_file)
@@ -120,18 +119,17 @@ def dumpFinalVectors(sents_file_name,labels_file_name,X_file_name,Y_file_name,Np
 
 lang_pair =  sys.argv[1]
 # path_sents_vecs='/home/enayat/Academics/SEM7/NLP/Project/str2vec-master/demo-data/str2vec-demo/output/'
-path_sents_vecs='/home/enayat/Academics/SEM7/NLP/Project/'
-path_labels='/home/enayat/Academics/SEM7/NLP/Project/'
+path_sents_vecs='MSR_Corpus_parsed'
 train_sents_file_name='MSRparaphrase_sentences_'+str(lang_pair)+'_train.vec.txt'
-train_labels_file_name='MSRparaphrase_labels_test'
+train_labels_file_name='MSRparaphrase_labels_'+str(lang_pair)+'_train'
 test_sents_file_name='MSRparaphrase_sentences_'+str(lang_pair)+'_test.vec.txt'
-test_labels_file_name='MSRparaphrase_labels_test'
+test_labels_file_name='MSRparaphrase_labels_'+str(lang_pair)+'_test'
 
 Np=15
-X_train_file_name="X_train_15"
-Y_train_file_name="Y_train_15"
-X_test_file_name="X_test_15"
-Y_test_file_name="Y_test_15"
+X_train_file_name="X_train"
+Y_train_file_name="Y_train"
+X_test_file_name="X_test"
+Y_test_file_name="Y_tests"
 
 dumpFinalVectors(train_sents_file_name,train_labels_file_name,X_train_file_name,Y_train_file_name, 15)
 dumpFinalVectors(test_sents_file_name,test_labels_file_name,X_test_file_name,Y_test_file_name,15)
