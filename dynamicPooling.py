@@ -50,8 +50,9 @@ def dynamicPooling(A,m,n,Np):
 def dumpFinalVectors(sents_file_name,labels_file_name,X_file_name,Y_file_name,Np=7):
 	# MSR_train_sents=open(path_sents_vecs+train_sents_file_name,"r").readlines()
 	# MSR_train_labels=open(path_labels+train_labels_file_name,"r").readlines()
-	MSR_sents=open(path_sents_vecs+'/'+sents_file_name,"r").readlines()
-	MSR_labels=open(path_sents_vecs+'/'+labels_file_name,"r").readlines()
+	print "OPENING FILES"
+	MSR_sents=open(dir_name+'/'+sents_file_name,"r").readlines()
+	MSR_labels=open(dir_name+'/'+labels_file_name,"r").readlines()
 	print "FILES OPENED"
 
 	X=[]
@@ -119,7 +120,7 @@ def dumpFinalVectors(sents_file_name,labels_file_name,X_file_name,Y_file_name,Np
 
 lang_pair =  sys.argv[1]
 # path_sents_vecs='/home/enayat/Academics/SEM7/NLP/Project/str2vec-master/demo-data/str2vec-demo/output/'
-path_sents_vecs='MSR_Corpus_parsed'
+# path_sents_vecs='MSR_Corpus_parsed'
 train_sents_file_name='MSRparaphrase_sentences_'+str(lang_pair)+'_train.vec.txt'
 train_labels_file_name='MSRparaphrase_labels_'+str(lang_pair)+'_train'
 test_sents_file_name='MSRparaphrase_sentences_'+str(lang_pair)+'_test.vec.txt'

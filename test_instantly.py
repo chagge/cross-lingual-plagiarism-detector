@@ -118,6 +118,6 @@ def main():
 
 	model_name="libsvm_model"
 	m=svm_load_model(model_name)
-	print svm_predict(X,1)
+	print svm_predict(X,1,m)
 
 main()
