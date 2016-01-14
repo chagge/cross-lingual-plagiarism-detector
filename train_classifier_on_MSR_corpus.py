@@ -78,7 +78,7 @@ def f6(sent1,sent2):
 	return float(len(common))/len(words2)
 
 def main():
-	lang_pair = sys.argv[0]
+	lang_pair = sys.argv[1]
 
 	X_train_file_name="X_train"
 	Y_train_file_name="Y_train"
@@ -108,8 +108,8 @@ def main():
 	x_train = [np.asarray(x).reshape(-1).tolist() for x in x_train]
 	x_test = [np.asarray(x).reshape(-1).tolist() for x in x_test]
 
-	sentences_train=open('MSR_parsed_data/MSRparaphrase_sentences_'+str(lang_pair)+'_train',"r").readlines()
-	sentences_test=open('MSR_parsed_data/MSRparaphrase_sentences_'+str(lang_pair)+'_test',"r").readlines()
+	sentences_train=open('MSR_Corpus_parsed/MSRparaphrase_sentences_'+str(lang_pair)+'_train',"r").readlines()
+	sentences_test=open('MSR_Corpus_parsed/MSRparaphrase_sentences_'+str(lang_pair)+'_test',"r").readlines()
 
 	X_train=[]
 	X_test=[]

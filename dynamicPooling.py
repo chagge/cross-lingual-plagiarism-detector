@@ -50,62 +50,70 @@ def dynamicPooling(A,m,n,Np):
 def dumpFinalVectors(sents_file_name,labels_file_name,X_file_name,Y_file_name,Np=7):
 	# MSR_train_sents=open(path_sents_vecs+train_sents_file_name,"r").readlines()
 	# MSR_train_labels=open(path_labels+train_labels_file_name,"r").readlines()
+
 	print "OPENING FILES"
-	MSR_sents=open(dir_name+'/'+sents_file_name,"r").readlines()
-	MSR_labels=open(dir_name+'/'+labels_file_name,"r").readlines()
-	print "FILES OPENED"
+	# MSR_sents=open(dir_name+'/'+sents_file_name,"r").readlines()
+	# MSR_labels=open(dir_name+'/'+labels_file_name,"r").readlines()
+	# print "FILES OPENED"
 
 	X=[]
 	Y=[]
+	with open(path_labels+'/'+labels_file_name,"r") as MSR_labels:
+		for line in MSR_labels:
+			label=int(line)
+			Y.append(label)
+	print "LABLES VARIABLE UPDATED"
 
-	for i in range(0,len(MSR_sents),2):
-		# if i==6:
-		# 	break
-		print "ITERATION: ",i
-		sentence1=MSR_sents[i]
-		sentence2=MSR_sents[i+1]
-		sent1_preprocess_list=sentence1.split(';')
-		# print len(sentence1_vectors)
-		sent2_preprocess_list=sentence2.split(';')
-		# print len(sentence1_vectors)
-		sent1_string_vectors=[s.split() for s in sent1_preprocess_list]
-		sent1_vectors = [list(map(float, row)) for row in sent1_string_vectors]
-		sent2_string_vectors=[s.split() for s in sent2_preprocess_list]
-		sent2_vectors = [list(map(float, row)) for row in sent2_string_vectors]
+	iteration_count=0
+	with open(dir_name+'/'+sents_file_name,"r") as MSR_sents:
+		for line in MSR_sents:
+			iteration_count+=1
+			print "ITERATION: ",iteration_count
+			if iteration_count%2!=0:
+				sentence1=line
+			else:
+				sentence2=line
+				# sentence1=MSR_sents[i]
+				# sentence2=MSR_sents[i+1]
+				sent1_preprocess_list=sentence1.split(';')
+				# print len(sentence1_vectors)
+				sent2_preprocess_list=sentence2.split(';')
+				# print len(sentence1_vectors)
+				sent1_string_vectors=[s.split() for s in sent1_preprocess_list]
+				sent1_vectors = [list(map(float, row)) for row in sent1_string_vectors]
+				sent2_string_vectors=[s.split() for s in sent2_preprocess_list]
+				sent2_vectors = [list(map(float, row)) for row in sent2_string_vectors]
 
-		print len(sent1_vectors), len(sent2_vectors)
-		# sent1_vectors =np.array(sent1_vectors)
-		# sent2_vectors =np.array(sent2_vectors)
-		similarity_matrix=np.zeros((len(sent1_vectors),len(sent2_vectors)))
+				# print len(sent1_vectors), len(sent2_vectors)
+				# sent1_vectors =np.array(sent1_vectors)
+				# sent2_vectors =np.array(sent2_vectors)
+				similarity_matrix=np.zeros((len(sent1_vectors),len(sent2_vectors)))
 
-		for i in range(len(sent1_vectors)):
-			for j in range(len(sent2_vectors)):
-				similarity_matrix[i][j]=cosine_similarity(sent1_vectors[i],sent2_vectors[j])
+				for i in range(len(sent1_vectors)):
+					for j in range(len(sent2_vectors)):
+						similarity_matrix[i][j]=cosine_similarity(sent1_vectors[i],sent2_vectors[j])
 
+				m=len(sent1_vectors)	#no_rows
+				n=len(sent2_vectors)	#no_columns
+				similarity_matrix=np.matrix(similarity_matrix)
+				# print "INITITAL SM SHAPE: ",similarity_matrix.shape
+				row_diff=Np-m
+				# print "row diff:",row_diff
+				col_diff=Np-n
+				for i in range(row_diff):
+					similarity_matrix=np.vstack((similarity_matrix,similarity_matrix[i,:]))
+				print similarity_matrix.shape
+				# print "col diff:",col_diff
+				for i in range(col_diff):
+					similarity_matrix=np.hstack((similarity_matrix,similarity_matrix[:,i]))
+				# print "PADDED SM SHAPE:",similarity_matrix.shape
+				m=similarity_matrix.shape[0]
+				n=similarity_matrix.shape[1]
+				print "m,n",m,n
+				pooledMatrix=dynamicPooling(similarity_matrix,m,n,Np)
+				# print "POOLED SM SHAPE:",pooledMatrix.shape
 
-		m=len(sent1_vectors)	#no_rows
-		n=len(sent2_vectors)	#no_columns
-		similarity_matrix=np.matrix(similarity_matrix)
-		# print "INITITAL SM SHAPE: ",similarity_matrix.shape
-		row_diff=Np-m
-		# print "row diff:",row_diff
-		col_diff=Np-n
-		for i in range(row_diff):
-			similarity_matrix=np.vstack((similarity_matrix,similarity_matrix[i,:]))
-		print similarity_matrix.shape
-		# print "col diff:",col_diff
-		for i in range(col_diff):
-			similarity_matrix=np.hstack((similarity_matrix,similarity_matrix[:,i]))
-		# print "PADDED SM SHAPE:",similarity_matrix.shape
-		m=similarity_matrix.shape[0]
-		n=similarity_matrix.shape[1]
-		print "m,n",m,n
-		pooledMatrix=dynamicPooling(similarity_matrix,m,n,Np)
-		# print "POOLED SM SHAPE:",pooledMatrix.shape
-		label=int(MSR_labels[i])
-
-		X.append(pooledMatrix)
-		Y.append(label)
+				X.append(pooledMatrix)
 
 	X=np.array(X)
 	print X.shape
@@ -120,7 +128,7 @@ def dumpFinalVectors(sents_file_name,labels_file_name,X_file_name,Y_file_name,Np
 
 lang_pair =  sys.argv[1]
 # path_sents_vecs='/home/enayat/Academics/SEM7/NLP/Project/str2vec-master/demo-data/str2vec-demo/output/'
-# path_sents_vecs='MSR_Corpus_parsed'
+path_labels='MSR_Corpus_parsed'
 train_sents_file_name='MSRparaphrase_sentences_'+str(lang_pair)+'_train.vec.txt'
 train_labels_file_name='MSRparaphrase_labels_'+str(lang_pair)+'_train'
 test_sents_file_name='MSRparaphrase_sentences_'+str(lang_pair)+'_test.vec.txt'
@@ -130,7 +138,7 @@ Np=15
 X_train_file_name="X_train"
 Y_train_file_name="Y_train"
 X_test_file_name="X_test"
-Y_test_file_name="Y_tests"
+Y_test_file_name="Y_test"
 
 dumpFinalVectors(train_sents_file_name,train_labels_file_name,X_train_file_name,Y_train_file_name, 15)
 dumpFinalVectors(test_sents_file_name,test_labels_file_name,X_test_file_name,Y_test_file_name,15)
