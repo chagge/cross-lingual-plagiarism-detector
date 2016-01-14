@@ -4,6 +4,7 @@ from svmutil import *
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 import cPickle
+from sklearn import preprocessing
 
 def minPool(A):
 	return np.matrix(A).min()
@@ -87,17 +88,17 @@ def generatePooledMatrix(sentence1,sentence2,Np):
 	print "m,n",m,n
 	pooledMatrix=dynamicPooling(similarity_matrix,m,n,Np)
 	# print "POOLED SM SHAPE:",pooledMatrix.shape
-
-	# X.append(pooledMatrix)
-	# return X
-	return pooledMatrix
+	X=[]
+	X.append(pooledMatrix)
+	return X
+	# return pooledMatrix
 
 def main():
-	# sent1=raw_input("ENTER SENTENCE 1: ")
-	# sent2=raw_input("ENTER SENTENCE 2: ")
-
-	sent1="hello how are you?"
-	sent2="hey how do you do?"
+	sent1=raw_input("ENTER SENTENCE 1: ")
+	sent2=raw_input("ENTER SENTENCE 2: ")
+	dir_name="generated_models"
+	# sent1="hello how are you?"
+	# sent2="hey how do you do?"
 
 	Np=15
 	# pwd=os.getcwd()
@@ -115,9 +116,15 @@ def main():
 	sentence2=vec_file[1]
 	
 	X=generatePooledMatrix(sentence1,sentence2,Np)
+	X=np.array(X)
+
+	X =[preprocessing.scale(x) for x in X]	# ZERO MEAN AND UNIT VARIANCE
+	X = [np.asarray(x).reshape(-1).tolist() for x in X]	# CONVNVERTING MATRIX TO ARRAY
+
+	# print "len of X:",len(X)
 
 	model_name="libsvm_model"
-	m=svm_load_model(model_name)
-	print svm_predict(X,1,m)
+	m=svm_load_model(dir_name+'/'+model_name)
+	print svm_predict([1],X,m)
 
 main()
